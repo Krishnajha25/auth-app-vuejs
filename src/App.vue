@@ -1,17 +1,26 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Home :msg="['Red','Green','Blue']" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Home from './components/Home.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Home
+  },
+  data() {
+    return{
+      msg: [
+      'Red',
+      'Yellow',
+      'Green'
+      ]
+    }
   }
 }
 </script>
