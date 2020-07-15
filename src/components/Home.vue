@@ -1,16 +1,12 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Updated text</h2>
-    <router-link to="/login">Login</router-link>
+    <h1>Welcome to home page</h1>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: 
-  ["msg"]
 }
 </script>
 
