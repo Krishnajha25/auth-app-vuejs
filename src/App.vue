@@ -8,7 +8,9 @@
         <router-link to="/login">Login</router-link>
       </div>
     </header>
-    <router-view></router-view>
+    <div class="component-container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -73,5 +75,11 @@ a{
 
 .menu:hover{
   background: rgb(199, 198, 198);
+}
+
+.component-container{
+  padding: 20px;
+  width: 100%;
+  height: 100vh;
 }
 </style>
