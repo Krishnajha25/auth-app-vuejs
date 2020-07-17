@@ -8,10 +8,11 @@
                 {{ error }}
             </div>
             <div class="login-form-container" v-if="login" @submit.prevent="loginSubmit">
+                <h3>Login</h3>
                 <form method="post" name="loginForm" autocomplete="off">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input v-model="loginFormData.username" type="text" name="username" placeholder="Username">
+                        <label for="username">Email</label>
+                        <input v-model="loginFormData.email" type="email" name="email" placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -25,11 +26,8 @@
             </div>
 
             <div class="regiter-form-container" v-if="register" @submit.prevent="registerSubmit">
+                <h3>Register</h3>
                 <form method="post" name="registerForm" autocomplete="off">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input v-model="registerFormData.username" type="text" name="username" placeholder="Username">
-                    </div>
                     <div class="form-group">
                         <label for="username">Email</label>
                         <input v-model="registerFormData.email" type="email" name="email" placeholder="Email">
@@ -50,17 +48,18 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
     data(){
         return{
             register: false,
             login: true,
             loginFormData: {
-                username: '',
+                email: '',
                 password: ''
             },
             registerFormData: {
-                username: '',
                 email: '',
                 password: ''
             },
@@ -72,32 +71,45 @@ export default {
         registerForm(){
             this.register = true
             this.login = false
-            // console.log("Login -> ", this.login)
-            // console.log("Register -> ", this.register)
         },
         loginForm(){
             this.register = false
             this.login = true
-            // console.log("Login -> ", this.login)
-            // console.log("Register -> ", this.register)
         },
         loginSubmit(){
-            if(this.loginFormData.username == null || this.loginFormData.password == null){
-                this.error = "All fields are required"
+            if(this.registerFormData.email !== "" || this.registerFormData.password !== ""){
+                firebase
+                    .auth()
+                    .signInWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
+                    .then(() => {
+                        this.$router.replace({name: 'Welcome'})
+                    })
+                    .catch(err => {
+                        this.error = err.message
+                    })
             }
             else{
-                console.log("Login submitted")
-                console.log(this.loginFormData.username)
+                console.log(this.error)
             }
         },
         registerSubmit(){
-            if(this.registerFormData.username == null || this.registerFormData.email == null || this.registerFormData.password == null){
-                this.error = "All fields are required"
+            if(this.registerFormData.email !== "" || this.registerFormData.password !== ""){
+                firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
+                    .then(data => {
+                        data.user
+                            .updateProfile({
+                                displayName: this.registerFormData.username
+                            })
+                            .then(() => {})
+                    })
+                    .catch(err => {
+                        this.error = err.message
+                    })
             }
             else{
-                console.log("Register submitted")
-                console.log(this.registerFormData.username)
-                console.log(this.registerFormData.email)
+                console.log(this.error)
             }
         }
     },
