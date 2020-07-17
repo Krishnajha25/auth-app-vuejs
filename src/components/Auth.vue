@@ -4,15 +4,18 @@
 
         </div>
         <div class="right">
-            <div class="login-form-container" v-if="login">
-                <form method="post" autocomplete="off">
+            <div class="error" v-if="error">
+                {{ error }}
+            </div>
+            <div class="login-form-container" v-if="login" @submit.prevent="loginSubmit">
+                <form method="post" name="loginForm" autocomplete="off">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" name="username" placeholder="Username">
+                        <input v-model="loginFormData.username" type="text" name="username" placeholder="Username">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" placeholder="Password">
+                        <input v-model="loginFormData.password" type="password" name="password" placeholder="Password">
                     </div>
                     <button class="submit-btn" type="submit">
                         Login
@@ -21,19 +24,19 @@
                 <p class="new-user-cta" @click="registerForm">New user? Register here</p>
             </div>
 
-            <div class="regiter-form-container" v-if="register">
-                <form method="post" autocomplete="off">
+            <div class="regiter-form-container" v-if="register" @submit.prevent="registerSubmit">
+                <form method="post" name="registerForm" autocomplete="off">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" name="username" placeholder="Username">
+                        <input v-model="registerFormData.username" type="text" name="username" placeholder="Username">
                     </div>
                     <div class="form-group">
                         <label for="username">Email</label>
-                        <input type="email" name="email" placeholder="Email">
+                        <input v-model="registerFormData.email" type="email" name="email" placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" placeholder="Password">
+                        <input v-model="registerFormData.password" type="password" name="password" placeholder="Password">
                     </div>
                     <button class="submit-btn" type="submit">
                         Register
@@ -51,7 +54,18 @@ export default {
     data(){
         return{
             register: false,
-            login: true
+            login: true,
+            loginFormData: {
+                username: '',
+                password: ''
+            },
+            registerFormData: {
+                username: '',
+                email: '',
+                password: ''
+            },
+            error: null
+
         }
     },
     methods: {
@@ -66,10 +80,29 @@ export default {
             this.login = true
             // console.log("Login -> ", this.login)
             // console.log("Register -> ", this.register)
+        },
+        loginSubmit(){
+            if(this.loginFormData.username == null || this.loginFormData.password == null){
+                this.error = "All fields are required"
+            }
+            else{
+                console.log("Login submitted")
+                console.log(this.loginFormData.username)
+            }
+        },
+        registerSubmit(){
+            if(this.registerFormData.username == null || this.registerFormData.email == null || this.registerFormData.password == null){
+                this.error = "All fields are required"
+            }
+            else{
+                console.log("Register submitted")
+                console.log(this.registerFormData.username)
+                console.log(this.registerFormData.email)
+            }
         }
     },
     mounted(){
-        console.log('Login page mounted')
+        // console.log('Login page mounted')
     }
 }
 </script>
@@ -116,7 +149,7 @@ form{
 }
 
 label{
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .submit-btn {
