@@ -4,7 +4,15 @@
       <div class="logo">
         <router-link to="/"><h1>Vue Auth App</h1></router-link>
       </div>
-      <div class="menu">
+      <div v-if="user.loggedIn" class="menu">
+        <!-- <a @click.prevent="signOut">Sign Out</a> -->
+        <p> Welcome, {{ user.data.displayName }} </p>
+        
+        <div class="signout-container">
+          <button class="btn-signout" @click.prevent="signOut">Sign Out</button>
+        </div>
+      </div>
+      <div class="menu" v-else>
         <router-link to="/login">Login</router-link>
       </div>
     </header>
@@ -15,6 +23,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import firebase from 'firebase'
 
 export default {
   name: 'App',
@@ -23,12 +33,25 @@ export default {
   // },
   data() {
     return{
-      msg: [
-      'Red',
-      'Yellow',
-      'Green'
-      ]
+      showSignOut: false
     }
+  },
+  methods: {
+    signOut(){
+      firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.$router.replace({
+          name: "Login"
+        })
+      })
+    }
+  },
+  computed: {
+    ...mapGetters({
+      user: "user"
+    })
   }
 }
 </script>
@@ -60,11 +83,15 @@ header{
 }
 
 .menu{
+  position: relative;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  transition: .2s ease-in;
+  min-width: 80px;
+  padding: 8px;
+  border-radius: 5px;
+  /* transition: .2s ease-in; */
 }
 
 a{
@@ -73,12 +100,43 @@ a{
 }
 
 .menu:hover{
-  background: rgb(199, 198, 198);
+  background: #fff
+}
+
+.menu:hover .signout-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* transition: .2s ease-in; */
 }
 
 .component-container{
   padding: 20px;
   width: 100%;
   height: 100vh;
+}
+
+.signout-container {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 0 5px 5px;
+    /* transition: .2s ease-in; */
+}
+
+.btn-signout{
+  cursor: pointer;
+  background: none;
+  border: none;
+  /* transition: .2s ease-in; */
+}
+
+.btn-signout:hover{
+  color: red;
 }
 </style>

@@ -4,19 +4,21 @@
 
         </div>
         <div class="right">
-            <div class="error" v-if="error">
+            <div class="error" v-if="error.length">
                 <h4 v-for="(e, index) in error" :key="index" class="error-text">{{ e }}</h4>
             </div>
+
+            <!-- Login form -->
             <div class="login-form-container" v-if="login" @submit.prevent="loginSubmit">
                 <h3>Login</h3>
                 <form method="post" name="loginForm" autocomplete="off" novalidate="true">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input v-model="loginFormData.email" type="email" id="email" name="email" placeholder="Email">
+                        <input @keydown="error=[]" v-model="loginFormData.email" type="email" id="email" name="email" placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input v-model="loginFormData.password" type="password" id="password" name="password" placeholder="Password">
+                        <input @keydown="error=[]" v-model="loginFormData.password" type="password" id="password" name="password" placeholder="Password">
                     </div>
                     <button class="submit-btn" type="submit">
                         Login
@@ -25,16 +27,21 @@
                 <p class="new-user-cta" @click="registerForm">New user? Register here</p>
             </div>
 
+            <!-- Register form -->
             <div class="regiter-form-container" v-if="register" @submit.prevent="registerSubmit">
                 <h3>Register</h3>
                 <form method="post" name="registerForm" autocomplete="off" novalidate="true">
                     <div class="form-group">
+                        <label for="username">Username</label>
+                        <input @keydown="error=[]" v-model="registerFormData.username" type="text" id="username" name="username" placeholder="Username">
+                    </div>
+                    <div class="form-group">
                         <label for="email">Email</label>
-                        <input v-model="registerFormData.email" type="email" id="email" name="email" placeholder="Email">
+                        <input @keydown="error=[]" v-model="registerFormData.email" type="email" id="email" name="email" placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input v-model="registerFormData.password" type="password" id="password" name="password" placeholder="Password">
+                        <input @keydown="error=[]" v-model="registerFormData.password" type="password" id="password" name="password" placeholder="Password">
                     </div>
                     <button class="submit-btn" type="submit">
                         Register
@@ -60,6 +67,7 @@ export default {
                 password: null
             },
             registerFormData: {
+                username: null,
                 email: null,
                 password: null
             },
@@ -77,56 +85,58 @@ export default {
             this.login = true
         },
         loginSubmit(){
-            if(this.loginFormData.email !== "" || this.loginFormData.password !== ""){
-                // console.log("Inside loginSubmit true")
-                firebase
-                    .auth()
-                    .signInWithEmailAndPassword(this.loginFormData.email, this.loginFormData.password)
-                    .then(() => {
-                        console.log(this.loginFormData.password.length)
-                        this.$router.replace({name: 'Welcome'})
-                        // console.log("Welcome ", this.loginFormData.email)
-                    })
-                    .catch(err => {
-                        if(err.code === "auth/user-not-found"){
-                            this.error = "Email is not registered"
-                        }
-                        else if(err.code === "auth/wrong-password"){
-                            this.error = "Email id or password is wrong"
-                        }
-                        else{
-                            this.error = "Some error occured. Please try again!"            
-                        }
-                        // this.error = err.code
-                        // console.log(err)
-                    })
+            if(this.loginFormData.email && this.loginFormData.password){
+                if(this.validateEmail(this.loginFormData.email)){
+                    firebase
+                        .auth()
+                        .signInWithEmailAndPassword(this.loginFormData.email, this.loginFormData.password)
+                        .then(() => {
+                            this.$router.replace({name: 'Welcome'})
+                        })
+                        .catch(err => {
+                            if(err.code === "auth/user-not-found"){
+                                this.error.push("Email is not registered")
+                            }
+                            else if(err.code === "auth/wrong-password"){
+                                this.error.push("Email id or password is wrong")
+                            }
+                            else{
+                                this.error.push("Some error occured. Please try again!")
+                            }
+                            // this.error = err.code
+                            // console.log(err)
+                        })
+                }
             }
             else{
-                this.error = "Some error occured. Please try again!"
+                this.error.push("Email and password are required.")
             }
         },
         registerSubmit(){
             if(this.registerFormData.email && this.registerFormData.password){
                 if(this.validateEmail(this.registerFormData.email)){
-                    if(this.validateEmail(this.registerFormData.email)){
-                        if(this.registerFormData.password.length >= 6){
-                            firebase
-                            .auth()
-                            .createUserWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
-                            .then(data => {
-                                data.user
-                                    .updateProfile({
-                                        displayName: this.registerFormData.username
-                                    })
-                                    .then(() => {
-                                        // console.log()
-                                        this.$router.replace({name: 'Welcome'})
-                                    })
-                            })
-                            .catch(err => {
-                                this.error = err.message
-                            })
-                        }
+                    if(this.registerFormData.password.length >= 6){
+                        firebase
+                        .auth()
+                        .createUserWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
+                        .then(data => {
+                            data.user
+                                .updateProfile({
+                                    displayName: this.registerFormData.username
+                                })
+                                .then(() => {
+                                    // console.log()
+                                    this.$router.replace({name: 'Welcome'})
+                                })
+                        })
+                        .catch(err => {
+                            this.error.push(err.message)
+                            // console.log(err.message)
+                        })
+                    }
+                    else{
+                        // console.log( typeof(this.registerFormData.password.length))
+                        this.error.push("Password should contain atleast 6 characters")
                     }
                 }
                 else{
@@ -157,8 +167,8 @@ export default {
 }
 
 .auth-container{
-    width: 80%;
-    margin: 0 10%;
+    width: 60%;
+    margin: 0 20%;
     display: flex;
     justify-content: space-evenly;
 }
@@ -190,6 +200,7 @@ h3{
     padding: 5px;
     margin-bottom: 20px;
     text-align: center;
+    transition: .3s ease-in;
 }
 
 form{
