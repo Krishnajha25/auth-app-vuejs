@@ -5,18 +5,18 @@
         </div>
         <div class="right">
             <div class="error" v-if="error">
-                {{ error }}
+                <h4 v-for="(e, index) in error" :key="index" class="error-text">{{ e }}</h4>
             </div>
             <div class="login-form-container" v-if="login" @submit.prevent="loginSubmit">
                 <h3>Login</h3>
-                <form method="post" name="loginForm" autocomplete="off">
+                <form method="post" name="loginForm" autocomplete="off" novalidate="true">
                     <div class="form-group">
-                        <label for="username">Email</label>
-                        <input v-model="loginFormData.email" type="email" name="email" placeholder="Email">
+                        <label for="email">Email</label>
+                        <input v-model="loginFormData.email" type="email" id="email" name="email" placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input v-model="loginFormData.password" type="password" name="password" placeholder="Password">
+                        <input v-model="loginFormData.password" type="password" id="password" name="password" placeholder="Password">
                     </div>
                     <button class="submit-btn" type="submit">
                         Login
@@ -27,14 +27,14 @@
 
             <div class="regiter-form-container" v-if="register" @submit.prevent="registerSubmit">
                 <h3>Register</h3>
-                <form method="post" name="registerForm" autocomplete="off">
+                <form method="post" name="registerForm" autocomplete="off" novalidate="true">
                     <div class="form-group">
-                        <label for="username">Email</label>
-                        <input v-model="registerFormData.email" type="email" name="email" placeholder="Email">
+                        <label for="email">Email</label>
+                        <input v-model="registerFormData.email" type="email" id="email" name="email" placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input v-model="registerFormData.password" type="password" name="password" placeholder="Password">
+                        <input v-model="registerFormData.password" type="password" id="password" name="password" placeholder="Password">
                     </div>
                     <button class="submit-btn" type="submit">
                         Register
@@ -56,14 +56,14 @@ export default {
             register: false,
             login: true,
             loginFormData: {
-                email: '',
-                password: ''
+                email: null,
+                password: null
             },
             registerFormData: {
-                email: '',
-                password: ''
+                email: null,
+                password: null
             },
-            error: null
+            error: []
 
         }
     },
@@ -77,40 +77,69 @@ export default {
             this.login = true
         },
         loginSubmit(){
-            if(this.registerFormData.email !== "" || this.registerFormData.password !== ""){
+            if(this.loginFormData.email !== "" || this.loginFormData.password !== ""){
+                // console.log("Inside loginSubmit true")
                 firebase
                     .auth()
-                    .signInWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
+                    .signInWithEmailAndPassword(this.loginFormData.email, this.loginFormData.password)
                     .then(() => {
+                        console.log(this.loginFormData.password.length)
                         this.$router.replace({name: 'Welcome'})
+                        // console.log("Welcome ", this.loginFormData.email)
                     })
                     .catch(err => {
-                        this.error = err.message
+                        if(err.code === "auth/user-not-found"){
+                            this.error = "Email is not registered"
+                        }
+                        else if(err.code === "auth/wrong-password"){
+                            this.error = "Email id or password is wrong"
+                        }
+                        else{
+                            this.error = "Some error occured. Please try again!"            
+                        }
+                        // this.error = err.code
+                        // console.log(err)
                     })
             }
             else{
-                console.log(this.error)
+                this.error = "Some error occured. Please try again!"
             }
         },
         registerSubmit(){
-            if(this.registerFormData.email !== "" || this.registerFormData.password !== ""){
-                firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
-                    .then(data => {
-                        data.user
-                            .updateProfile({
-                                displayName: this.registerFormData.username
+            if(this.registerFormData.email && this.registerFormData.password){
+                if(this.validateEmail(this.registerFormData.email)){
+                    if(this.validateEmail(this.registerFormData.email)){
+                        if(this.registerFormData.password.length >= 6){
+                            firebase
+                            .auth()
+                            .createUserWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
+                            .then(data => {
+                                data.user
+                                    .updateProfile({
+                                        displayName: this.registerFormData.username
+                                    })
+                                    .then(() => {
+                                        // console.log()
+                                        this.$router.replace({name: 'Welcome'})
+                                    })
                             })
-                            .then(() => {})
-                    })
-                    .catch(err => {
-                        this.error = err.message
-                    })
+                            .catch(err => {
+                                this.error = err.message
+                            })
+                        }
+                    }
+                }
+                else{
+                    this.error.push('Please enter a valid email')
+                }
             }
             else{
-                console.log(this.error)
+                this.error.push('Email and password are required')
             }
+        },
+        validateEmail(email){
+            var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email)
         }
     },
     mounted(){
@@ -148,6 +177,21 @@ export default {
     margin: 0 5%;
 }
 
+h3{
+    text-align: start;
+    border-bottom: 2px solid #6c63ff;
+    margin-bottom: 20px;
+}
+
+.error-text{
+    border: 1px solid #dd3030;
+    background: #f07b7b;
+    color: #ffffff;
+    padding: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 form{
     text-align: start;
 }
@@ -162,6 +206,10 @@ form{
 
 label{
     font-size: 12px;
+}
+
+input{
+    width: 100%;
 }
 
 .submit-btn {
