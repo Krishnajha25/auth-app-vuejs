@@ -6,10 +6,11 @@
       </div>
       <div v-if="user.loggedIn" class="menu">
         <!-- <a @click.prevent="signOut">Sign Out</a> -->
-        <p> Welcome, {{ user.data.displayName }} </p>
-        
+        <p > Welcome, {{ user.data.displayName }} </p>
+        <!-- <p v-else>Welcome, {{ user.data.displayName }} </p> -->
         <div class="signout-container">
-          <button class="btn-signout" @click.prevent="signOut">Sign Out</button>
+          <router-link to="/profile"><button class="btn profile">Profile</button></router-link>
+          <button class="btn signout" @click.prevent="signOut">Sign Out</button>
         </div>
       </div>
       <div class="menu" v-else>
@@ -25,7 +26,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
-
 export default {
   name: 'App',
   // components: {
@@ -33,7 +33,8 @@ export default {
   // },
   data() {
     return{
-      showSignOut: false
+      showSignOut: false,
+      name: localStorage.getItem('username')
     }
   },
   methods: {
@@ -42,6 +43,7 @@ export default {
       .auth()
       .signOut()
       .then(() => {
+        localStorage.clear()
         this.$router.replace({
           name: "Login"
         })
@@ -52,6 +54,9 @@ export default {
     ...mapGetters({
       user: "user"
     })
+  },
+  mounted(){
+    this.computed
   }
 }
 </script>
@@ -62,7 +67,6 @@ export default {
   margin: 0;
   box-sizing: border-box;
 }
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -70,7 +74,6 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 header{
   display: flex;
   justify-content: space-between;
@@ -81,7 +84,6 @@ header{
   flex-direction: row;
   background: rgb(235, 233, 233);
 }
-
 .menu{
   position: relative;
   cursor: pointer;
@@ -93,30 +95,26 @@ header{
   border-radius: 5px;
   /* transition: .2s ease-in; */
 }
-
 a{
   text-decoration: none;
   color: #2c3e50;
 }
-
 .menu:hover{
   background: #fff
 }
-
 .menu:hover .signout-container{
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   /* transition: .2s ease-in; */
 }
-
 .component-container{
   padding: 20px;
   width: 100%;
   height: 100vh;
 }
-
 .signout-container {
     display: none;
     position: absolute;
@@ -128,15 +126,19 @@ a{
     border-radius: 0 0 5px 5px;
     /* transition: .2s ease-in; */
 }
-
-.btn-signout{
+.btn{
   cursor: pointer;
   background: none;
   border: none;
+  margin-top: 10px;
+  outline: none;
   /* transition: .2s ease-in; */
 }
 
-.btn-signout:hover{
+.profile:hover{
+  color: green;
+}
+.signout:hover{
   color: red;
 }
 </style>

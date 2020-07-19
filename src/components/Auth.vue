@@ -13,12 +13,14 @@
                 <h3>Login</h3>
                 <form method="post" name="loginForm" autocomplete="off" novalidate="true">
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input @keydown="error=[]" v-model="loginFormData.email" type="email" id="email" name="email" placeholder="Email">
+                        <!-- <label for="email">Email</label> -->
+                        <v-text-field v-model="loginFormData.email" color="success" :rules="rules" hide-details="auto" @keydown="error=[]" label="Email" type="email" autofocus></v-text-field>
+                        <!-- <input @keydown="error=[]" v-model="loginFormData.email" type="email" id="email" name="email" placeholder="Email"> -->
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input @keydown="error=[]" v-model="loginFormData.password" type="password" id="password" name="password" placeholder="Password">
+                        <!-- <label for="password">Password</label> -->
+                        <v-text-field v-model="loginFormData.password" color="success" :rules="rules" hide-details="auto" @keydown="error=[]" label="Password" type="password"></v-text-field>
+                        <!-- <input @keydown="error=[]" v-model="loginFormData.password" type="password" id="password" name="password" placeholder="Password"> -->
                     </div>
                     <button class="submit-btn" type="submit">
                         Login
@@ -32,16 +34,13 @@
                 <h3>Register</h3>
                 <form method="post" name="registerForm" autocomplete="off" novalidate="true">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input @keydown="error=[]" v-model="registerFormData.username" type="text" id="username" name="username" placeholder="Username">
+                        <v-text-field v-model="registerFormData.username" :rules="rules" hide-details="auto" @keydown="error=[]" label="Username"></v-text-field>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input @keydown="error=[]" v-model="registerFormData.email" type="email" id="email" name="email" placeholder="Email">
+                        <v-text-field v-model="registerFormData.email" :rules="rules" hide-details="auto" @keydown="error=[]" label="Email" type="email"></v-text-field>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input @keydown="error=[]" v-model="registerFormData.password" type="password" id="password" name="password" placeholder="Password">
+                        <v-text-field v-model="registerFormData.password" :rules="rules" hide-details="auto" @keydown="error=[]" label="Password" type="password"></v-text-field>
                     </div>
                     <button class="submit-btn" type="submit">
                         Register
@@ -72,7 +71,10 @@ export default {
                 email: null,
                 password: null
             },
-            error: []
+            error: [],
+            rules: [
+                value => !!value || 'Required.'
+            ]
 
         }
     },
@@ -92,7 +94,10 @@ export default {
                         .auth()
                         .signInWithEmailAndPassword(this.loginFormData.email, this.loginFormData.password)
                         .then(() => {
-                            this.showSnackbar()
+                            // this.showSnackbar()
+                            localStorage.loggedIn = true
+                            // localStorage.username = user.
+                            localStorage.email = 
                             this.$router.replace({name: 'Welcome'})
                         })
                         .catch(err => {
@@ -109,6 +114,9 @@ export default {
                             // console.log(err)
                         })
                 }
+                else{
+                    this.error.push("Please enter a valid email")
+                }
             }
             else{
                 this.error.push("Email and password are required.")
@@ -122,12 +130,15 @@ export default {
                         .auth()
                         .createUserWithEmailAndPassword(this.registerFormData.email, this.registerFormData.password)
                         .then(data => {
+                            
                             data.user
                                 .updateProfile({
                                     displayName: this.registerFormData.username
                                 })
                                 .then(() => {
                                     // console.log()
+                                    localStorage.username = this.registerFormData.username
+                                    localStorage.email = this.registerFormData.email    
                                     this.$router.replace({name: 'Welcome'})
                                 })
                         })
@@ -160,10 +171,10 @@ export default {
             setTimeout(function(){
                 x.className = x.className.replace("show", "")
             }, 3000)
-        }
+        },
     },
     mounted(){
-        // console.log('Login page mounted')
+        console.log('Login page mounted')
     }
 }
 </script>
@@ -199,7 +210,7 @@ export default {
 
 h3{
     text-align: start;
-    border-bottom: 2px solid #6c63ff;
+    /* border-bottom: 2px solid #6c63ff; */
     margin-bottom: 20px;
 }
 
@@ -225,12 +236,21 @@ form{
     margin-bottom: 20px;
 }
 
-label{
+/* label{
     font-size: 12px;
-}
+    margin-bottom: 4px;
+    padding-left: 5px;
+} */
 
 input{
     width: 100%;
+    border-bottom: 2px solid #ccc;
+    padding: 5px;
+}
+
+input::placeholder{
+    display: flex;
+    align-items: center;
 }
 
 .submit-btn {
