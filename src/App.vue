@@ -84,6 +84,7 @@ header{
   flex-direction: row;
   background: rgb(235, 233, 233);
 }
+
 .menu{
   position: relative;
   cursor: pointer;
@@ -97,6 +98,7 @@ header{
   color: #fff;
   /* transition: .2s ease-in; */
 }
+
 a{
   text-decoration: none;
   color: #2c3e50;
