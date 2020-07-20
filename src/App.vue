@@ -93,6 +93,8 @@ header{
   min-width: 80px;
   padding: 8px;
   border-radius: 5px;
+  background: #564fce;
+  color: #fff;
   /* transition: .2s ease-in; */
 }
 a{
