@@ -1,6 +1,6 @@
 <template>
-    <div >
-
+    <div class="profile-container">
+        Profile Component
     </div>
 </template>
 

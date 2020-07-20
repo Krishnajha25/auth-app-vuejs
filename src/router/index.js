@@ -36,13 +36,6 @@ const routes = [
         name: 'Welcome',
         component: () => import(/* webpackChunkName: "welcome" */ '../components/Welcome'),
         beforeEnter: (to, from, next) => {
-            // if(!localStorage.loggedIn){
-            //     next({
-            //         name: 'Login'
-            //     })
-            // } else{
-            //     next()
-            // }
             if(!localStorage.loggedIn){
                 next({
                     name: 'Login'
@@ -52,6 +45,20 @@ const routes = [
             }
         }
         
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import(/* webpackChunkName: "profile" */ '../components/Profile'),
+        beforeEnter: (to, from, next) => {
+            if(!localStorage.loggedIn){
+                next({
+                    name: 'Login'
+                })
+            } else{
+                next()
+            }
+        }
     },
     {
         path: '*',
