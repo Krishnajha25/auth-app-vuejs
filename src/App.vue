@@ -9,7 +9,7 @@
         <p > Welcome, {{ user.data.displayName }} </p>
         <!-- <p v-else>Welcome, {{ user.data.displayName }} </p> -->
         <div class="signout-container">
-          <router-link to="/profile"><button class="btn profile">Profile</button></router-link>
+          <router-link class="profile-btn" to="/profile"><button class="btn profile">Profile</button></router-link>
           <button class="btn signout" @click.prevent="signOut">Sign Out</button>
         </div>
       </div>
@@ -100,32 +100,38 @@ a{
   color: #2c3e50;
 }
 .menu:hover{
-  background: #fff
+  background: #564fce;
+  color: #fff
 }
+
 .menu:hover .signout-container{
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  /* transition: .2s ease-in; */
+  transition: .2s ease-in;
 }
+
 .component-container{
   padding: 20px;
   width: 100%;
   height: 100vh;
 }
+
 .signout-container {
     display: none;
+    flex-direction: column;
     position: absolute;
-    top: 35px;
+    top: 30px;
     left: 0;
-    background: #fff;
+    background: #564fce;
     width: 100%;
-    height: 100%;
+    height: 60px;
     border-radius: 0 0 5px 5px;
     /* transition: .2s ease-in; */
 }
+
 .btn{
   cursor: pointer;
   background: none;
@@ -133,12 +139,21 @@ a{
   margin-top: 10px;
   outline: none;
   /* transition: .2s ease-in; */
+  /* padding-bottom: 10px; */
 }
 
 .profile:hover{
   color: green;
 }
 .signout:hover{
-  color: red;
+  color: #e7e7e7;
+}
+
+.profile-btn{
+  color: #fff;
+}
+
+.profile-btn:hover{
+  color: #e7e7e7;
 }
 </style>
