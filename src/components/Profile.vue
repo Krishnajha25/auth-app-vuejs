@@ -1,4 +1,5 @@
 <template>
+<v-app>
     <div class="profile-container">
         <div class="left">
             <div class="profile-pic-container">
@@ -24,9 +25,11 @@
                     <li><span>  <v-icon large color="teal darken-2">mdi-email</v-icon> Email</span> <input type="email" name="" id="" value="meera@gmail.com" readonly> </li>
                     <!-- <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li> -->
                 </ul>
+                <v-btn raised color="error">Change Password</v-btn>
             </div>
         </div>
     </div>
+    </v-app>
 </template>
 
 <script>
