@@ -22,7 +22,7 @@
                 <ul>
                     <li><span>  <v-icon large color="teal darken-2">mdi-account</v-icon> Name</span> <input type="text" name="" id="" value="Meera" readonly> </li>
                     <li><span>  <v-icon large color="teal darken-2">mdi-email</v-icon> Email</span> <input type="email" name="" id="" value="meera@gmail.com" readonly> </li>
-                    <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li>
+                    <!-- <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li> -->
                 </ul>
             </div>
         </div>
@@ -76,12 +76,19 @@ export default {
     width: 170px;
     background: crimson;
     border-radius: 50%;
-    box-shadow: 3px 5px 15px #919191;
+    box-shadow: 0px 8px 15px -3px #919191;
     overflow: hidden;
 }
 
 .profile-pic-container img{
+    cursor: pointer;
+    transition: transform .2s ease-in-out;
     width: 100%;
+}
+
+.profile-pic-container img:hover{
+
+    transform: scale(1.2);
 }
 
 .profile-name{
@@ -115,7 +122,7 @@ export default {
 }
 
 .right{
-    width: 60%;
+    width: 50%;
     /* display: flex; */
     /* flex-direction: column;
     align-items: flex-start; */
@@ -124,9 +131,15 @@ export default {
 
 .details-container{
     min-height: 400px;
-    background: #f5f5f5;
-    box-shadow: 0px 5px 10px #919191;
+    /* box-shadow: -3px 8px 15px -3px #ccc; */
     padding: 10px;
+}
+
+.details-container p{
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid crimson;
+    padding: 5px;
 }
 
 .details-container ul li:nth-child(1){
@@ -140,8 +153,18 @@ export default {
 
 .details-container ul li{
     list-style: none;
-    background: rgba(173, 216, 230, 0.7);
+    /* background: rgba(173, 216, 230, 0.7); */
     padding: 5px;
+    font-size: 20px;
+    align-items: center;
+    border-radius: 5px;
+    transition: .2s ease;
+    cursor: pointer;
+}
+
+.details-container ul li:hover{
+    box-shadow: -3px 8px 15px -3px #ccc;
+    font-size: 22px;
 }
 
 </style>
