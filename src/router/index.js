@@ -61,6 +61,20 @@ const routes = [
         }
     },
     {
+        path: '/change-password',
+        name: 'ChangePassword',
+        component: () => import(/* webpackChunkName: "change-password" */ '../components/ChangePassword'),
+        beforeEnter: (to, from, next) => {
+            if(!localStorage.loggedIn){
+                next({
+                    name: 'Login'
+                })
+            } else{
+                next()
+            }
+        }
+    },
+    {
         path: '*',
         name: 'Not found',
         component: () => import(/* webpackChunkName: "notfound" */ '../components/Notfound')

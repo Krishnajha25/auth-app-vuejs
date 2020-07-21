@@ -25,7 +25,7 @@
                     <li><span>  <v-icon large color="teal darken-2">mdi-email</v-icon> Email</span> <input type="email" name="" id="" value="meera@gmail.com" readonly> </li>
                     <!-- <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li> -->
                 </ul>
-                <v-btn raised color="error">Change Password</v-btn>
+                <router-link to="/change-password"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link> 
             </div>
         </div>
     </div>
@@ -145,6 +145,10 @@ export default {
     padding: 5px;
 }
 
+.details-container ul {
+    padding: 0;
+}
+
 .details-container ul li:nth-child(1){
     margin-top: 10px;
     margin-bottom: 10px;
@@ -168,6 +172,10 @@ export default {
 .details-container ul li:hover{
     box-shadow: -3px 8px 15px -3px #ccc;
     font-size: 22px;
+}
+
+.btn-change{
+    margin-top: 20px;
 }
 
 </style>
