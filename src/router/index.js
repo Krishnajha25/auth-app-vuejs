@@ -12,6 +12,7 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home
+        
     },
     {
         path: '/login',
@@ -58,22 +59,25 @@ const routes = [
             } else{
                 next()
             }
-        }
-    },
-    {
-        path: '/change-password',
-        name: 'ChangePassword',
-        component: () => import(/* webpackChunkName: "change-password" */ '../components/ChangePassword'),
-        beforeEnter: (to, from, next) => {
-            if(!localStorage.loggedIn){
-                next({
-                    name: 'Login'
-                })
-            } else{
-                next()
+        },
+        children: [
+            {
+                path: 'changePassword',
+                name: 'ChangePassword',
+                component: () => import(/* webpackChunkName: "change-password" */ '../components/ChangePassword'),
+                beforeEnter: (to, from, next) => {
+                    if(!localStorage.loggedIn){
+                        next({
+                            name: 'Login'
+                        })
+                    } else{
+                        next()
+                    }
+                }
             }
-        }
+        ]
     },
+    
     {
         path: '*',
         name: 'Not found',

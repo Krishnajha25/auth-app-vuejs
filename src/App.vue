@@ -18,7 +18,9 @@
       </div>
     </header>
     <div class="component-container">
-      <router-view></router-view>
+      <transition :name="transitionName" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </div>
   </div>
 </template>
@@ -34,7 +36,8 @@ export default {
   data() {
     return{
       showSignOut: false,
-      name: localStorage.getItem('username')
+      name: localStorage.getItem('username'),
+      transitionName: '',
     }
   },
   methods: {
@@ -57,6 +60,13 @@ export default {
   },
   mounted(){
     this.computed
+  },
+  watch: {
+    '$route' (to, from) {
+    const toDepth = to.path.split('/')[1].length
+    const fromDepth = from.path.split('/')[1].length
+    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    }
   }
 }
 </script>
@@ -163,4 +173,28 @@ a{
 .profile-btn:hover{
   color: #e7e7e7;
 }
+
+.slide-left-leave-active,
+.slide-left-enter-active {
+  transition: .5s;
+}
+.slide-left-enter {
+  transform: translate(100%, 0);
+}
+.slide-left-leave-to {
+  transform: translate(-100%, 0);
+}
+
+.slide-right-leave-active,
+.slide-right-enter-active {
+  transition: .5s;
+}
+.slide-right-enter {
+  transform: translate(-100%, 0);
+}
+.slide-right-leave-to {
+  transform: translate(100%, 0);
+}
+
+
 </style>
