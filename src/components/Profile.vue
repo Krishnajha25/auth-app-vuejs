@@ -25,9 +25,10 @@
                     <li><span>  <v-icon large color="teal darken-2">mdi-email</v-icon> Email</span> <input type="email" name="" id="" value="meera@gmail.com" readonly> </li>
                     <!-- <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li> -->
                 </ul>
-                <router-link to="profile/change-password"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link> 
+                <router-link to="/profile/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link>
             </div>
         </div>
+        <router-view></router-view>
     </div>
     </v-app>
 </template>

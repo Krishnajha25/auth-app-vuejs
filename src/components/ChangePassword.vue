@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+        Change password component
     </div>
 </template>
 
