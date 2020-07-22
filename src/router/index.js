@@ -48,9 +48,9 @@ const routes = [
         
     },
     {
-        path: '/profile',
-        name: 'Profile',
-        component: () => import(/* webpackChunkName: "profile" */ '../components/Profile'),
+        path: '/user',
+        name: 'User',
+        component: () => import(/* webpackChunkName: "user" */ '../components/User'),
         beforeEnter: (to, from, next) => {
             if(!localStorage.loggedIn){
                 next({
@@ -62,9 +62,51 @@ const routes = [
         },
         children: [
             {
+                path: 'profile',
+                name: 'Profile',
+                component: () => import(/* webpackChunkName: "orders" */ '../components/Profile/Profile'),
+                beforeEnter: (to, from, next) => {
+                    if(!localStorage.loggedIn){
+                        next({
+                            name: 'Login'
+                        })
+                    } else{
+                        next()
+                    }
+                }
+            },
+            {
+                path: 'orders',
+                name: 'Orders',
+                component: () => import(/* webpackChunkName: "orders" */ '../components/Profile/Orders'),
+                beforeEnter: (to, from, next) => {
+                    if(!localStorage.loggedIn){
+                        next({
+                            name: 'Login'
+                        })
+                    } else{
+                        next()
+                    }
+                }
+            },
+            {
+                path: 'address',
+                name: 'Address',
+                component: () => import(/* webpackChunkName: "address" */ '../components/Profile/Address'),
+                beforeEnter: (to, from, next) => {
+                    if(!localStorage.loggedIn){
+                        next({
+                            name: 'Login'
+                        })
+                    } else{
+                        next()
+                    }
+                }
+            },
+            {
                 path: 'changePassword',
                 name: 'ChangePassword',
-                component: () => import(/* webpackChunkName: "change-password" */ '../components/ChangePassword'),
+                component: () => import(/* webpackChunkName: "change-password" */ '../components/Profile/ChangePassword'),
                 beforeEnter: (to, from, next) => {
                     if(!localStorage.loggedIn){
                         next({

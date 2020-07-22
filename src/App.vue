@@ -9,7 +9,7 @@
         <p > Welcome, {{ user.data.displayName }} </p>
         <!-- <p v-else>Welcome, {{ user.data.displayName }} </p> -->
         <div class="signout-container">
-          <router-link class="profile-btn" to="/profile"><button class="btn profile">Profile</button></router-link>
+          <router-link class="profile-btn" to="/user"><button class="btn profile">Profile</button></router-link>
           <button class="btn signout" @click.prevent="signOut">Sign Out</button>
         </div>
       </div>

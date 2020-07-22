@@ -10,25 +10,18 @@
             </div>
             <div class="menus">
                 <ul>
-                    <li>Profile</li>
-                    <li>Orders</li>
-                    <li>Address</li>
-                    <li>Others</li>
+                    <router-link to="/user/profile"><li>Profile</li></router-link>
+                    <router-link to="/user/orders"><li>Orders</li></router-link>
+                    <router-link to="/user/address"><li>Address</li></router-link>
+                    <router-link to="/user/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link>
                 </ul>
             </div>
         </div>
         <div class="right">
             <div class="details-container">
-                <p>Your profile details</p>
-                <ul>
-                    <li><span>  <v-icon large color="teal darken-2">mdi-account</v-icon> Name</span> <input type="text" name="" id="" value="Meera" readonly> </li>
-                    <li><span>  <v-icon large color="teal darken-2">mdi-email</v-icon> Email</span> <input type="email" name="" id="" value="meera@gmail.com" readonly> </li>
-                    <!-- <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li> -->
-                </ul>
-                <router-link to="/profile/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link>
+                <router-view></router-view>
             </div>
         </div>
-        <router-view></router-view>
     </div>
     </v-app>
 </template>
