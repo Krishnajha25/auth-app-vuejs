@@ -13,7 +13,7 @@
                     <router-link to="/user/profile"><li>Profile</li></router-link>
                     <router-link to="/user/orders"><li>Orders</li></router-link>
                     <router-link to="/user/address"><li>Address</li></router-link>
-                    <router-link to="/user/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link>
+                    <!-- <router-link to="/user/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link> -->
                 </ul>
             </div>
         </div>
@@ -165,7 +165,7 @@ export default {
 
 .details-container ul li:hover{
     box-shadow: -3px 8px 15px -3px #ccc;
-    font-size: 22px;
+    /* font-size: 22px; */
 }
 
 .btn-change{

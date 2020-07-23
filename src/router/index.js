@@ -62,6 +62,20 @@ const routes = [
         },
         children: [
             {
+                path: '',
+                // name: 'Profile',
+                component: () => import(/* webpackChunkName: "orders" */ '../components/Profile/Profile'),
+                beforeEnter: (to, from, next) => {
+                    if(!localStorage.loggedIn){
+                        next({
+                            name: 'Login'
+                        })
+                    } else{
+                        next()
+                    }
+                }
+            },
+            {
                 path: 'profile',
                 name: 'Profile',
                 component: () => import(/* webpackChunkName: "orders" */ '../components/Profile/Profile'),
