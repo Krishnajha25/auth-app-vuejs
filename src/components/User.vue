@@ -10,7 +10,7 @@
             </div>
             <div class="menus">
                 <ul>
-                    <router-link to="/user/profile"><li>Profile</li></router-link>
+                    <router-link to="/user"><li>Profile</li></router-link>
                     <router-link to="/user/orders"><li>Orders</li></router-link>
                     <router-link to="/user/address"><li>Address</li></router-link>
                     <!-- <router-link to="/user/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link> -->
@@ -104,17 +104,29 @@ export default {
     font-size: 18px;
 }
 
+.menu ul a {
+    color: #cecece;
+}
+
 .menus ul li{
     margin-bottom: 10px;
     display: flex;
     align-items: flex-start;
     list-style: none;
-    color: #cccccc;
+    /* color: #cecece; */
     font-size: 20px;
     margin-left: -36px;
 }
 
-.menus ul li:nth-child(1){
+.v-application a{
+    color: #cecece;
+}
+
+.menus ul .is-active{
+    color: #383838;
+}
+
+.is-active li{
     color: #383838;
 }
 
