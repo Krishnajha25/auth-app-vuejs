@@ -6,7 +6,7 @@
                 <li><span>  <v-icon large color="teal darken-2">mdi-account</v-icon> Name</span> <input type="text" name="" id="" value="Meera" readonly> </li>
                 <li><span>  <v-icon large color="teal darken-2">mdi-email</v-icon> Email</span> <input type="email" name="" id="" value="meera@gmail.com" readonly> </li>
                 <!-- <li><span>Other</span> <input type="text" name="" id="" value="meera@gmail.com" readonly> </li> -->
-                <router-link to="/user/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link>
+                <li><router-link to="/user/changePassword"><v-btn class="btn-change" raised color="error">Change Password</v-btn></router-link></li>
             </ul>
         </div>
     </v-app>
@@ -76,6 +76,7 @@ export default {
     border-radius: 5px;
     transition: .2s ease;
     cursor: pointer;
+    text-align: start;
 }
 
 .details-container ul li:hover{
@@ -87,4 +88,8 @@ export default {
     margin-top: 20px;
 }
 
+.meta-container ul li:nth-child(3){
+    width: max-content;
+    box-shadow: none;
+}
 </style>
