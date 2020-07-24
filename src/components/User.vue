@@ -19,7 +19,9 @@
         </div>
         <div class="right">
             <div class="details-container">
-                <router-view></router-view>
+                <transition name="fade" mode="out-in">
+                    <router-view></router-view>
+                </transition>
             </div>
         </div>
     </div>
@@ -182,6 +184,14 @@ export default {
 
 .btn-change{
     margin-top: 20px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .2s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 </style>
