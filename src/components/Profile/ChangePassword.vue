@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <v-text-field v-model="changePassword.confirmPassword" color="success" :rules="rules" hide-details="auto" @keydown="error=[]" label="Confirm new password" type="password"></v-text-field>
                 </div>
-                <button type="submit">Change Password</button>
+                <v-btn color="primary">Change Password</v-btn>
             </form>
         </div>
     </v-app>
@@ -36,6 +36,14 @@ export default {
 
 .password-container{
     width: 400px;
+}
+
+form{
+    text-align: start;
+}
+
+.form-group{
+    margin-bottom: 20px;
 }
 
 </style>
