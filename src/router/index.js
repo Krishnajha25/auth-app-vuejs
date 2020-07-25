@@ -49,7 +49,7 @@ const routes = [
     },
     {
         path: '/user',
-        name: 'User',
+        // name: 'User',
         component: () => import(/* webpackChunkName: "user" */ '../components/User'),
         beforeEnter: (to, from, next) => {
             if(!localStorage.loggedIn){
@@ -74,7 +74,7 @@ const routes = [
                         next()
                     }
                 }
-            },
+            },  
             {
                 path: 'orders',
                 name: 'Orders',

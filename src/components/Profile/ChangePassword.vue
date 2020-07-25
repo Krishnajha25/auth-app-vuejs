@@ -8,18 +8,18 @@
             </div>
             <form method="post" autocomplete="off" novalidate="true" @submit.prevent="changePassword">
                 <div class="form-group">
-                    <v-text-field v-model="changePasswordData.oldPassword" color="success" :rules="rules" hide-details="auto" @keydown="error=[]" label="Previous password" type="password"></v-text-field>
+                    <v-text-field v-model="changePasswordData.oldPassword" @keydown="errors=[]" color="success" :rules="rules" hide-details="auto" label="Previous password" type="password"></v-text-field>
                 </div>
                 <div class="form-group">
-                    <v-text-field v-model="changePasswordData.newPassword" color="success" :rules="rules" hide-details="auto" @keydown="error=[]" label="New password" type="password"></v-text-field>
+                    <v-text-field v-model="changePasswordData.newPassword" @keydown="errors=[]" color="success" :rules="rules" hide-details="auto" label="New password" type="password"></v-text-field>
                 </div>
                 <div class="form-group">
-                    <v-text-field v-model="changePasswordData.confirmPassword" color="success" :rules="rules" hide-details="auto" @keydown="error=[]" label="Confirm new password" type="password"></v-text-field>
+                    <v-text-field v-model="changePasswordData.confirmPassword" @keydown="errors=[]" color="success" :rules="rules" hide-details="auto" label="Confirm new password" type="password"></v-text-field>
                 </div>
-                <!-- <v-btn color="primary">Change Password</v-btn> -->
-                <button class="submit-btn" type="submit">
+                <v-btn type="submit" color="primary">Change Password</v-btn>
+                <!-- <button class="submit-btn" type="submit">
                     Change Password
-                </button>
+                </button> -->
             </form>
         </div>
     </v-app>
@@ -47,19 +47,23 @@ export default {
 
             // console.log("Inside change password");
             var user = firebase.auth().currentUser
-            var cred = firebase.auth.EmailAuthProvider.credential(
-                user.email,
-                this.changePasswordData.oldPassword
-            )
 
             if(!this.changePasswordData.oldPassword || !this.changePasswordData.newPassword || !this.changePasswordData.confirmPassword){
-                this.errors.push("All fields are required")
+                if(!this.errors.includes("All fields are required")){
+                    this.errors.push("All fields are required")
+                }
                 // console.log("All fields required");
             }else if(this.changePasswordData.newPassword !== this.changePasswordData.confirmPassword){
-                this.errors.push("Password do not match")
+                if(!this.errors.includes("Password do not match")){
+                    this.errors.push("Password do not match")
+                }
                 // console.log("Password do not match");
             }
             else{
+                var cred = firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    this.changePasswordData.oldPassword
+                )
                 user.reauthenticateWithCredential(cred)
                 .then(() => {
                     user.updatePassword(this.changePasswordData.confirmPassword)
@@ -67,14 +71,26 @@ export default {
                         console.log("Password updated")
                     })
                     .catch((err) => {
-                        this.errors.push(err)
+                        // console.log("Update err", err)
+                        if(!this.errors.includes(err)){
+                            this.errors.push(err)
+                        }
                     })
                 })
                 .catch((err) => {
-                    this.errors.push(err)
+                    // console.log("reauthenticate error", err)
+                    // this.errors.push(err)
+                    if(err.code === "auth/wrong-password"){
+                        if(!this.errors.includes("Previous password is wrong.")){
+                            this.errors.push("Previous password is wrong.")
+                        }
+                    }
                 })
             }
-        }
+        },
+    },
+    mounted(){
+        
     }
     
 }
