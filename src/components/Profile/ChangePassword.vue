@@ -1,6 +1,10 @@
 <template>
     <v-app>
-        <div class="password-container">
+        <div class="success" v-if="success">
+            Password changed successfully!
+        </div>
+        <div class="password-container" v-if="!success">
+            
             <div class="error" v-if="errors.length">
                 <div class="error" v-for="(error, index) in errors" :key="index">
                     {{ error }}
@@ -39,7 +43,8 @@ export default {
             rules: [
                 value => !!value || 'Required.'
             ],
-            errors: []
+            errors: [],
+            success: false
         }
     },
     methods: {
@@ -68,7 +73,8 @@ export default {
                 .then(() => {
                     user.updatePassword(this.changePasswordData.confirmPassword)
                     .then(() => {
-                        console.log("Password updated")
+                        // console.log("Password updated")
+                        this.success = true
                     })
                     .catch((err) => {
                         // console.log("Update err", err)
@@ -108,6 +114,12 @@ form{
 
 .form-group{
     margin-bottom: 20px;
+}
+
+.success{
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 </style>
